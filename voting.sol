@@ -1,17 +1,18 @@
 //SPDX-License-Identifier: MIT
 
-
 pragma solidity >= 0.7.0 <0.9.0;
 
-contract theDAO{
+
+contract voting{
 
     address voteOwner;
+
 
     constructor(){
         voteOwner = msg.sender;
     }
-
-
+    
+    
     struct Voter{
         string name;
         bool vote;
@@ -19,8 +20,9 @@ contract theDAO{
         address voted;
     }
 
-
-    mapping(address => Voter) public voters;
+    
+    Voter[] public voters;
+    mapping(address=>Voter) votersName;
     address[] votedList;
     
  
@@ -30,6 +32,7 @@ contract theDAO{
         address proposer;
         uint voteCount;
     }
+    
     
     uint id;
     
@@ -41,43 +44,50 @@ contract theDAO{
     
     function makeProposal(string memory _name, string memory _description, address _proposer) public {
         uint num = 0;
-       Proposals[id] = Proposal({
+        id+=1;
+        
+        require(voteOwner == msg.sender);
+        
+        Proposals[id] = Proposal({
            name: _name,
            description: _description,
            proposer: _proposer,
            voteCount: num
         });
+        
+        Proposals[id];
     }
     
+
     
     function registerAddress(address voterAddress, string memory _name) public{
         if(voterAddress == msg.sender ){
-            
-            voters[voterAddress] = Voter({
-               name: _name,
-               voted: false,
-               vote: 1,
-               eligibility: true
-            });
+            voters.push(Voter({
+              name: _name,
+              vote: false,
+              voted: msg.sender
+            }));
         }
     }
     
     
-    function getVoters(address _voter) public view returns(string memory){
-        return voters[_voter].name;
-    }
     
-
-
-    function vote(uint id) public {
-        Voter storage sender = voters[msg.sender];
-        Proposals[id].voteCount ++;
+    function getVoter(address _voter) public view returns(string memory){
+        return votersName[_voter].name;
     }
     
     
-    // function registeredAddress(address register) public{
+
+    function vote(uint Proposal_id) public {
+        require(msg.sender == voteOwner);
+        Proposals[Proposal_id].voteCount += 1;
+        votedList.push(votersName[msg.sender].voted);
         
-    // }
-
+        for(uint i=0; i<votedList.length; i++){
+            if(votedList[i] == msg.sender ){
+                revert("Already Voted");
+            }
+        }
+    }
     
 }
