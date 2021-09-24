@@ -1,5 +1,5 @@
 # Afro-DAO
-A community DAO for funding projects SDS &amp; MDG related projects across the African Continent
+A community DAO for funding projects SDS &amp; MDG related projects across the African Continent.
 
 A DAO
 Build a Smart Contract where different addresses can send funds into.
