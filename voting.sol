@@ -2,30 +2,33 @@
 
 pragma solidity >= 0.7.0 <0.9.0;
 
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.0.0/contracts/token/ERC20/IERC20.sol";
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.0.0/contracts/token/ERC20/ERC20.sol";
+
 
 contract voting{
 
     address voteOwner;
 
 
-    constructor(){
+    constructor() {
         voteOwner = msg.sender;
     }
     
     
     struct Voter{
-        string name;
-        bool vote;
+        address voter;
+        uint uniqueVote;
+        bool voted;
         //bool eligibility; //voter is required to have a certain amount of votes in order
-        address voted;
     }
 
     
     Voter[] public voters;
-    mapping(address=>Voter) votersName;
+    mapping(address => Voter) votersId;
     address[] votedList;
     
- 
+    
     struct Proposal{
         string name;
         string description;
@@ -34,17 +37,17 @@ contract voting{
     }
     
     
-    uint id;
-    
+    //Proposal[] ProposalsList;
     mapping(uint => Proposal) public Proposals;
     
     //Events
     event Voted();
     
+    uint id;
     
     function makeProposal(string memory _name, string memory _description, address _proposer) public {
         uint num = 0;
-        id+=1;
+        id += 1;
         
         require(voteOwner == msg.sender);
         
@@ -58,36 +61,48 @@ contract voting{
         Proposals[id];
     }
     
-
     
-    function registerAddress(address voterAddress, string memory _name) public{
-        if(voterAddress == msg.sender ){
+    
+    function registerVoter() public{
+        uint num = 1;
+
+        if(voteOwner == msg.sender ){
             voters.push(Voter({
-              name: _name,
-              vote: false,
-              voted: msg.sender
+              voter: msg.sender,
+              uniqueVote: num,
+              voted: false
             }));
         }
     }
     
+
     
-    
-    function getVoter(address _voter) public view returns(string memory){
-        return votersName[_voter].name;
+    function vote(uint Proposal_id) public {
+        require(msg.sender == voteOwner);
+        
+        if(votersId[msg.sender].voted == false){
+            votedList.push(msg.sender);
+        }
+        
+        for(uint i=0; i<votedList.length; i++){
+            if(votedList[i] == msg.sender && Proposals[Proposal_id].voteCount <= votersId[msg.sender].uniqueVote){
+            votedList.push(msg.sender);
+            Proposals[Proposal_id].voteCount += 1;
+            votersId[msg.sender].voted = true;
+            }
+        }
+        Proposals[Proposal_id].voteCount;
+        
     }
     
     
-
-    function vote(uint Proposal_id) public {
-        require(msg.sender == voteOwner);
-        Proposals[Proposal_id].voteCount += 1;
-        votedList.push(votersName[msg.sender].voted);
+    function checkVotedList() public view returns(bool voted){
         
         for(uint i=0; i<votedList.length; i++){
-            if(votedList[i] == msg.sender ){
-                revert("Already Voted");
+            if(msg.sender == votedList[i]){
+                voted = votersId[msg.sender].voted;
+                return voted;
             }
         }
     }
-    
 }
