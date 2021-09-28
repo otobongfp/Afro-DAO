@@ -4,7 +4,7 @@ A community DAO for funding projects SDS &amp; MDG related projects across the A
 A DAO
 Build a Smart Contract where different addresses can send funds into.
 
-//HOW IT WORKS
+HOW IT WORKS
 //The Funds are then meant to fund certain activities.
 //So people can create a Proposal to get funds.
 //The Proposal provides a few details :
@@ -13,8 +13,8 @@ Build a Smart Contract where different addresses can send funds into.
 //	Amount in Ethers(Although this would have to be translated to the equivalent in our token)
 //	Wallet address of Proposer
 
-//HOW PROPOSAL IS DONE
-//The Proposals can then be voted for by stakeholders in the community.
+HOW PROPOSAL IS DONE
+The Proposals can then be voted for by stakeholders in the community.
 //The Stakeholders are verified addresses.
 //Once more that 60% of the stakeholder have voted
 //The proposal enters into the next stage where it is to be voted for by the Community.
