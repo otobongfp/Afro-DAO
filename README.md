@@ -22,7 +22,7 @@ Build a Smart Contract where different addresses can send funds into.
 //The funds requested is released from the contract to fund the address that requested for support.
 //And the proposal is Finalized and Removed from List of Proposals
 
-//To contribute to wallet holdings you need to use our Token.
+//To contribute to wallet holdings you need to use our Token
 //We have a feature that allows you to swap your holdings for our Token, the Token is then used to fund projects.
 //The Proposals are centred around supporting women empowerment initiatives, entrepreneurs, etc to help them get started
 
